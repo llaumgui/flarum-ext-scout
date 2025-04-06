@@ -58,6 +58,13 @@ return [
             return [
                 'id' => $discussion->id, // TNTSearch requires the ID to be part of the searchable data
                 'title' => $discussion->title,
+                // Attributes used for meilisearch search revelancy
+                // @see https://www.meilisearch.com/docs/learn/relevancy/relevancy
+                // Datetime must be on UNIX format.
+                'comment_count' => $discussion->comment_count,
+                'participant_count' => $discussion->participant_count,
+                'created_at' => $discussion->created_at->timestamp,
+                'last_posted_at' => $discussion->last_posted_at->timestamp,
             ];
         }),
     (new ScoutExtend(Post::class))
@@ -85,6 +92,10 @@ return [
         ->attributes(function (Post $post): array {
             return [
                 'id' => $post->id,
+                // Attributes used for meilisearch search revelancy
+                // @see https://www.meilisearch.com/docs/learn/relevancy/relevancy
+                // Datetime must be on UNIX format.
+                'created_at' => $post->created_at->timestamp,
             ];
         }),
     // We use a separate extender call specifically for CommentPost
